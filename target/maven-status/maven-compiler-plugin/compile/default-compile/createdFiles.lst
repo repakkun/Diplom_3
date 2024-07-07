@@ -1,0 +1,13 @@
+api\helpers\UserCreateClient.class
+page\RecoveryPage.class
+page\CabinetPage.class
+api\pojo\UserCreate.class
+page\RegistrationPage.class
+page\LoginPage.class
+api\helpers\Client.class
+DriverFactory.class
+api\helpers\DeleteUserClient.class
+api\helpers\StorageTokenClient.class
+api\helpers\UserChecks.class
+Constants.class
+page\MainPage.class

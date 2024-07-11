@@ -2,12 +2,10 @@ import io.qameta.allure.junit4.DisplayName;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import page.MainPage;
@@ -15,25 +13,14 @@ import page.MainPage;
 import java.util.Objects;
 
 @RunWith(Parameterized.class)
-public class ConstructorTransitionTest {
+public class ConstructorTransitionTest extends BaseTest {
 
-    @Rule
-    public DriverFactory driverFactory = new DriverFactory();
-    private WebDriver driver;
     private final By tab;
     private final String name;
 
-    public ConstructorTransitionTest(By tab,String name) {
+    public ConstructorTransitionTest(By tab, String name) {
         this.tab = tab;
         this.name = name;
-    }
-
-
-
-    @Before
-    public void before() {
-        driver = driverFactory.getDriver();
-        driver.get(Constants.MAIN_URL);
     }
 
     @Parameterized.Parameters
@@ -45,14 +32,21 @@ public class ConstructorTransitionTest {
         };
     }
 
+    @Before
+    @Override
+    public void setUp() {
+        super.setUp();
+        driver.get(Constants.MAIN_URL);
+    }
+
     @Test
     @DisplayName("Переход на вкладку")
     public void transitionBunsTest() {
         MainPage mainPage = new MainPage(driver);
 
-        if (Objects.equals(name, "Булки")){
-        mainPage.clickTabButton("Начинки");
-        mainPage.clickTabButton(name);
+        if (Objects.equals(name, "Булки")) {
+            mainPage.clickTabButton("Начинки");
+            mainPage.clickTabButton(name);
         } else {
             mainPage.clickTabButton(name);
         }

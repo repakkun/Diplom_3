@@ -1,30 +1,25 @@
-import api.helpers.DeleteUserClient;
-import api.helpers.StorageTokenClient;
-import org.junit.*;
-import org.openqa.selenium.WebDriver;
 import io.qameta.allure.junit4.DisplayName;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import page.LoginPage;
 import page.MainPage;
 import page.RegistrationPage;
 import com.github.javafaker.Faker;
+
 import java.time.LocalDateTime;
 
+public class RegistrationTest extends BaseTest {
 
-public class RegistrationTest {
-
-    @Rule
-    public DriverFactory driverFactory = new DriverFactory();
-    private final StorageTokenClient storageTokenClient = new StorageTokenClient();
-    private WebDriver driver;
     private RegistrationPage registrationPage;
-    private String token;
     Faker faker = new Faker();
 
     @Before
-    public void before(){
-        driver = driverFactory.getDriver();
+    @Override
+    public void setUp() {
+        super.setUp();
         registrationPage = new RegistrationPage(driver);
         driver.get(Constants.REGISTRATION_URL);
     }
@@ -33,10 +28,10 @@ public class RegistrationTest {
     @DisplayName("Регистрация пользователя")
     public void registrationUserTest() {
         LoginPage loginPage = new LoginPage(driver);
-        String email = "Mushroom" + faker.name().firstName() + "@yandex.ru";
+        String email = "Pakkun" + faker.name().firstName() + "@gmail.com";
         String password = String.valueOf(LocalDateTime.now());
 
-        registrationPage.inputName("Ivan" + faker.name().lastName());
+        registrationPage.inputName("Ilya" + faker.name().lastName());
         registrationPage.inputEmail(email);
         registrationPage.inputPassword(password);
         registrationPage.clickRegistrationButton();
@@ -54,20 +49,12 @@ public class RegistrationTest {
     @Test
     @DisplayName("Ошибка для некорректного пароля")
     public void errorIncorrectPasswordTest() {
-        registrationPage.inputName("Ivan" + faker.name().lastName());
-        registrationPage.inputEmail("Mushroom" + faker.name().firstName() + "@yandex.ru");
+        registrationPage.inputName("Ilya" + faker.name().lastName());
+        registrationPage.inputEmail("Pakkun" + faker.name().firstName() + "@mail.ru");
         registrationPage.inputPassword("null");
         registrationPage.clickRegistrationButton();
 
         new WebDriverWait(driver, Constants.TIMER).until(ExpectedConditions.visibilityOfElementLocated(registrationPage.incorrectPassword));
         Assert.assertEquals(registrationPage.getIncorrectPasswordMessage(), "Некорректный пароль");
-    }
-
-    @After
-    public void after() {
-        if (token != null) {
-            DeleteUserClient deleteClient = new DeleteUserClient();
-            deleteClient.userDelete(token);
-        }
     }
 }
